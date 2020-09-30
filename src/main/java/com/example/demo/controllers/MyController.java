@@ -1,7 +1,7 @@
 package com.example.demo.controllers;
 
-import com.example.demo.models.MyModels;
-import com.example.demo.services.MyServices;
+import com.example.demo.models.BeregnerModel;
+import com.example.demo.services.BeregnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,27 +11,28 @@ import org.springframework.web.context.request.WebRequest;
 @Controller
 public class MyController {
 
-     MyModels myModels = new MyModels();
+     BeregnerModel beregnerModel = new BeregnerModel();
 
-     MyServices myServices = new MyServices();
+     BeregnerService beregnerService = new BeregnerService();
 
-     @GetMapping ("/")
-     public String index(Model calcModel) {
+     @GetMapping ("/calc")
+     public String calc(Model calcModel) {
 
-          calcModel.addAttribute("myModels", myModels);
+          calcModel.addAttribute("beregnerModel", beregnerModel);
 
-          return "index";
+          return "beregner";
      }
 
      @PostMapping("/postCalc")
      public String postCalc(WebRequest dataFromForm) {
 
-          double value = Double.valueOf(dataFromForm.getParameter("input"));
-          MyModels calcFromForm = new MyModels(value);
+          double value = Double.valueOf(dataFromForm.getParameter("output"));
 
-          myModels = calcFromForm;
+          BeregnerModel calcFromForm = new BeregnerModel(beregnerService.calc(value));
 
-          return "redirect:/";
+          beregnerModel = calcFromForm;
+
+          return "redirect:/calc";
      }
 
 }
